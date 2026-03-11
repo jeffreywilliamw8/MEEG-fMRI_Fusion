@@ -18,10 +18,9 @@ def aggregate_correlations():
     # Constants for fsaverage processing
     num_splits = 21
     v_per_split = 7802
-    n_timepoints = 370
-    total_vertices = 163842 
+    n_timepoints = int(args.eeg_frequency * 3.7)  # Either 370 or 185 time points depending on frequency
+    total_vertices = 163842
 
-    # Base path following the structure of the regression script
     base_path = f'/scratch/jeffreykatab/Code/Encoding_Models/correlations/policy-{args.channel_policy}/{args.eeg_frequency}_Hz'
 
     subjects = [f"{i:02d}" for i in range(1, args.num_subjects + 1)]
@@ -35,8 +34,7 @@ def aggregate_correlations():
             if not os.path.isdir(hemi_path):
                 continue
 
-            # Pre-allocate full array (Time, Vertices) for the whole brain surface
-            # This is significantly faster than list.extend()
+            # Pre-allocate full array (Time, Vertices) for the whole brain surfacwe
             full_data = np.zeros((n_timepoints, total_vertices), dtype=np.float32)
 
             for i in range(1, num_splits + 1):

@@ -61,7 +61,7 @@ def main():
     gc.collect()
 
     # 3. Encoding Model (Ridge Regression)
-    # We predict fMRI voxel activity from EEG principal components at each time point.
+    # predicting fMRI voxel activity from EEG principal components at each time point.
     alphas = np.logspace(-1, 1, 20)
     n_times = eeg_train.shape
     n_vertices = fmri_train.shape
@@ -76,12 +76,12 @@ def main():
         reg = RidgeCV(alphas=alphas)
         reg.fit(X_train, fmri_train)
         
-        # Predict and calculate correlation per vertex
+        # Predicting and calculating correlation per vertex
         pred_fmri = reg.predict(X_test)
         # Correlation between predicted and actual test BOLD for this vertex
         correlations[t, :] = np.array([np.corrcoef(pred_fmri[:, v], fmri_test[:, v])[0, 1] for v in range(n_vertices)], dtype=np.float32)
 
-    # 4. Save Correlations
+    # 4. Saving Correlations
     out_dir = f'/scratch/jeffreykatab/Code/Encoding_Models/correlations/policy-{args.channel_policy}/fmri_sub-{args.subject}/{args.hemisphere}_hemi'
     os.makedirs(out_dir, exist_ok=True)
     
